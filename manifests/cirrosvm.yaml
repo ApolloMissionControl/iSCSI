@@ -1,0 +1,30 @@
+apiVersion: kubevirt.io/v1alpha1
+kind: VirtualMachine
+metadata:
+  name: cirrosvm
+spec:
+  terminationGracePeriodSeconds: 0
+  domain:
+    resources:
+      requests:
+        memory: 64M
+    devices:
+      disks:
+      - name: mydisk
+        volumeName: myvolume
+        disk:
+          dev: vda
+      - name: cloudinitdisk
+        volumeName: cloudinitvolume
+        disk:
+          dev: vdb
+  volumes:
+    - name: myvolume
+      iscsi:
+        iqn: iqn.2017-01.io.kubevirt:sn.42
+        lun: 3
+        targetPortal: iscsi-demo-target.default.svc.cluster.local
+    - name: cloudinitvolume
+      cloudInitNoCloud:
+        userDataBase64: I2Nsb3VkLWNvbmZpZwoK 
+
